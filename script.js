@@ -85,7 +85,35 @@ let finances = [
   ['Dec-2016', 60988],
   ['Jan-2017', 138230],
   ['Feb-2017', 671099],
-]
-console.log('Financial Analysis')
-let totalMonths = [finances.length]
-console.log(`total months: ${finances.length}`)
+];
+console.log('Financial Analysis');
+
+let totalMonths = [finances.length];
+
+console.log(`total months: ${finances.length}`);
+
+let result = finances.reduce((a, b, i) => {
+  let d =
+      i > 1
+        ? a
+        : {
+            total: a[1],
+            average: a[1],
+            sumChange: 0,
+            lastMonth: a[1],
+            increase: a,
+            decrease: a,
+          },
+    change = b[1] - d.lastMonth;
+
+  d.total += b[1];
+  d.sumChange += change;
+  d.lastMonth = b[1];
+  d.average = d.sumChange / i;
+  d.increase = d.increase[1] > change ? d.increase : [b[0], change];
+  d.decrease = d.decrease[1] < change ? d.decrease : [b[0], change];
+  return d;
+});
+
+console.log(result); // Return the full object
+console.log(result.total); // Only return one value, the total
